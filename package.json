@@ -1,0 +1,22 @@
+{
+  "name": "omahacred",
+  "version": "0.0.0",
+  "description": "Omaha Cred",
+  "main": "app.js",
+  "dependencies": {
+    "socket.io": "*",
+    "node-static": "*"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.4.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://aheuermann@bitbucket.org/aheuermann/omahacred.git"
+  },
+  "author": "",
+  "license": "BSD"
+}
