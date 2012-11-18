@@ -1,8 +1,8 @@
 {
-  "name": "omahacred",
+  "name": "NodeWebSocketsExampleProject",
   "version": "0.0.0",
-  "description": "Omaha Cred",
-  "main": "app.js",
+  "description": "NodeWebSocketsExampleProject",
+  "main": "server/server.coffee",
   "dependencies": {
     "socket.io": "*",
     "node-static": "*"
