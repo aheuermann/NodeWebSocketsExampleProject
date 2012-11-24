@@ -14,7 +14,7 @@
     "supervisor": "*"
   },
   "scripts": {
-    "start":  "supervisor ./server/app.coffee",
+    "start":  "supervisor -w ./server/*.coffee ./server/app.coffee ",
     "compile": "coffee -w -o ./public/js -c ./client/*.coffee",
     "test": "mocha --compilers coffee:coffee-script ./test/test.coffee"
   },
