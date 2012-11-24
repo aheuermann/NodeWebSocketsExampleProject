@@ -13,6 +13,6 @@ describe 'PointlessCharacterCounter', () ->
     	dm.add "babba"
     	expect(dm.get()).to.deep.equal({"a":2,"b":3})
     it 'should only accept alpha-numeric characters', () ->
-    	dm.add "ba * ( 1"
-    	expect(dm.get()).to.deep.equal({"a":3,"b":4,"1":1})
+    	dm.add "ba * ( 1_"
+    	expect(dm.get()).to.deep.equal({"a":3,"b":4,"1":1,"_":1})
 
