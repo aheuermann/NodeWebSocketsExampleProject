@@ -21,7 +21,7 @@ clients = []
 # Listen for incoming connections from clients
 io.sockets.on "connection", (client) ->
   clients.push client
-  client.emit 'update', dataManager.get
+  client.emit 'update', dataManager.get()
   client.on "save", (msg) ->
     data = dataManager.add msg.message
     client.emit 'update', data
