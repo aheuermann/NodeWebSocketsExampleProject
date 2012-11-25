@@ -10,8 +10,8 @@ class window.ChartView
         container = d3.select selector
         @el = container.append "svg"
         @el.attr('width', @width)
-        @charts.push(new BubbleChart(@el, @width, @height, []))
         @charts.push(new BarChart(@el, @width, @height, []))
+        @charts.push(new BubbleChart(@el, @width, @height, []))
         return
     #new chart data.  Set it on the current chart object and redraw
     update: (@data) ->

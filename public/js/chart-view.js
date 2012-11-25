@@ -22,8 +22,8 @@
       container = d3.select(selector);
       this.el = container.append("svg");
       this.el.attr('width', this.width);
-      this.charts.push(new BubbleChart(this.el, this.width, this.height, []));
       this.charts.push(new BarChart(this.el, this.width, this.height, []));
+      this.charts.push(new BubbleChart(this.el, this.width, this.height, []));
       return;
     }
 
