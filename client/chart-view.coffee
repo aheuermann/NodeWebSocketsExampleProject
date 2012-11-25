@@ -1,26 +1,27 @@
 #the main chart view
 class window.ChartView
     width: 800
+    height: 500 #only used to restrict height of bubble chart currently
     data: []
     charts: []
     currIndex: 0
 
     constructor: (selector) ->
         container = d3.select selector
-        #@width = container.style.width || 800
         @el = container.append "svg"
         @el.attr('width', @width)
-        @charts.push(new BubbleChart(@el, @width, []))
-        @charts.push(new BarChart(@el, @width, []))
+        @charts.push(new BubbleChart(@el, @width, @height, []))
+        @charts.push(new BarChart(@el, @width, @height, []))
         return
     #new chart data.  Set it on the current chart object and redraw
     update: (@data) ->
         @charts[@currIndex].setData(@data).draw()
         return
     #toggle the chart type. Collapse the current and draw the new type
-    toggleType: () ->
+    toggleType: (index) ->
         oldIndex = @currIndex
-        @currIndex = (@currIndex + 1) % @charts.length
+        @currIndex = index
+        
         @charts[oldIndex].collapse( () =>
             @charts[@currIndex].setData(@data).draw()
         )
@@ -28,7 +29,7 @@ class window.ChartView
 #the base chart object
 class Chart
     @total: 0
-    constructor: (@el, @width, @data) ->
+    constructor: (@el, @width, @height, @data) ->
 
     setData:(data)->
         @data = data
@@ -43,7 +44,7 @@ class BubbleChart extends Chart
     draw: () ->
         bubble = d3.layout.pack()
             .sort(null)
-            .size([@width, 500])
+            .size([@width, @height])
             .padding(1.5)
         bubbleData = bubble.nodes({"children" : @data}).filter((d) -> return not d.children)
         @el.selectAll("g")
@@ -59,22 +60,21 @@ class BubbleChart extends Chart
                     node.selectAll("circle")
                         .transition().duration(1000)
                         .attr("r", (d) -> return d.r )
-                        .each("end", (d, i) =>
-                            if i == 0
-                                node.append("text").attr("text-anchor", "middle").text((d) -> return d.letter)
-                                node.selectAll("text").attr("dy", ".3em")
-                        )
+                    node.append("text")
+                        .attr("text-anchor", "middle").text((d) -> return d.letter)
+                        .attr("dy", ".3em")
             )
         return
     collapse: (callback) ->
+        @el.selectAll("text").remove()
         @el.selectAll("circle")
-        .transition().duration(1000)
-        .attr("r", (d) -> return 0 )
-        .each("end", (d, i) =>
-            if i == 0
-                @el.selectAll('*').remove()
-                callback()
-        )
+            .transition().duration(1000)
+            .attr("r", (d) -> return 0 )
+            .each("end", (d, i) =>
+                if i == 0
+                    @el.selectAll('*').remove()
+                    callback()
+            )
 
 #basic bar chart...
 class BarChart extends Chart
@@ -93,7 +93,7 @@ class BarChart extends Chart
             .attr("y", (d,i) -> return i*23 )
             .attr("height", 20)
             .style("fill", (d)  => return @fill d.letter )
-            .transition().duration(2000)
+            .transition().duration(1000)
             .attr("width", (d,i) => return Math.floor(d.value*@coef) )
 
 
@@ -108,13 +108,14 @@ class BarChart extends Chart
             .text((d) -> return d.letter)
         return
     collapse: (callback) =>
+        @el.selectAll("text").remove()
         @el.selectAll("rect")
-        .transition().duration(1000)
-        .attr("width", (d,i) => 
-            return 0
-        )
-        .each("end", (d, i) =>
-            if i == 0
-                @el.selectAll('*').remove()
-                callback()
-        )
+            .transition().duration(1000)
+            .attr("width", (d,i) => 
+                return 0
+            )
+            .each("end", (d, i) =>
+                if i == 0
+                    @el.selectAll('*').remove()
+                    callback()
+            )

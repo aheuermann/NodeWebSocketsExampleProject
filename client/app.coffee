@@ -11,8 +11,12 @@ socket.on 'update', (data) ->
     chart.update dataArr
   
 $("#send").click () ->
-  socket.emit 'save', {message: characters.val()}
-  characters.val ''
+    socket.emit 'save', {message: characters.val()}
+    characters.val ''
 
-$("#toggleType").click () ->
-  chart.toggleType()
+$("#toggle li").click () ->
+    if !$(@).is(".active")
+        $("#toggle .active").removeClass("active")
+        $(@).addClass("active")
+        index = $(@).data("index")
+        chart.toggleType(index)

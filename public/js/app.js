@@ -31,8 +31,14 @@
     return characters.val('');
   });
 
-  $("#toggleType").click(function() {
-    return chart.toggleType();
+  $("#toggle li").click(function() {
+    var index;
+    if (!$(this).is(".active")) {
+      $("#toggle .active").removeClass("active");
+      $(this).addClass("active");
+      index = $(this).data("index");
+      return chart.toggleType(index);
+    }
   });
 
 }).call(this);

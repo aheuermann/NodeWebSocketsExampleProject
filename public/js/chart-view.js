@@ -9,6 +9,8 @@
 
     ChartView.prototype.width = 800;
 
+    ChartView.prototype.height = 500;
+
     ChartView.prototype.data = [];
 
     ChartView.prototype.charts = [];
@@ -20,8 +22,8 @@
       container = d3.select(selector);
       this.el = container.append("svg");
       this.el.attr('width', this.width);
-      this.charts.push(new BubbleChart(this.el, this.width, []));
-      this.charts.push(new BarChart(this.el, this.width, []));
+      this.charts.push(new BubbleChart(this.el, this.width, this.height, []));
+      this.charts.push(new BarChart(this.el, this.width, this.height, []));
       return;
     }
 
@@ -30,11 +32,11 @@
       this.charts[this.currIndex].setData(this.data).draw();
     };
 
-    ChartView.prototype.toggleType = function() {
+    ChartView.prototype.toggleType = function(index) {
       var oldIndex,
         _this = this;
       oldIndex = this.currIndex;
-      this.currIndex = (this.currIndex + 1) % this.charts.length;
+      this.currIndex = index;
       return this.charts[oldIndex].collapse(function() {
         return _this.charts[_this.currIndex].setData(_this.data).draw();
       });
@@ -48,9 +50,10 @@
 
     Chart.total = 0;
 
-    function Chart(el, width, data) {
+    function Chart(el, width, height, data) {
       this.el = el;
       this.width = width;
+      this.height = height;
       this.data = data;
     }
 
@@ -83,7 +86,7 @@
     BubbleChart.prototype.draw = function() {
       var bubble, bubbleData, node,
         _this = this;
-      bubble = d3.layout.pack().sort(null).size([this.width, 500]).padding(1.5);
+      bubble = d3.layout.pack().sort(null).size([this.width, this.height]).padding(1.5);
       bubbleData = bubble.nodes({
         "children": this.data
       }).filter(function(d) {
@@ -98,22 +101,19 @@
           node.append("circle").style("fill", function(d) {
             return _this.fill(d.letter);
           });
-          return node.selectAll("circle").transition().duration(1000).attr("r", function(d) {
+          node.selectAll("circle").transition().duration(1000).attr("r", function(d) {
             return d.r;
-          }).each("end", function(d, i) {
-            if (i === 0) {
-              node.append("text").attr("text-anchor", "middle").text(function(d) {
-                return d.letter;
-              });
-              return node.selectAll("text").attr("dy", ".3em");
-            }
           });
+          return node.append("text").attr("text-anchor", "middle").text(function(d) {
+            return d.letter;
+          }).attr("dy", ".3em");
         }
       });
     };
 
     BubbleChart.prototype.collapse = function(callback) {
       var _this = this;
+      this.el.selectAll("text").remove();
       return this.el.selectAll("circle").transition().duration(1000).attr("r", function(d) {
         return 0;
       }).each("end", function(d, i) {
@@ -152,7 +152,7 @@
         return i * 23;
       }).attr("height", 20).style("fill", function(d) {
         return _this.fill(d.letter);
-      }).transition().duration(2000).attr("width", function(d, i) {
+      }).transition().duration(1000).attr("width", function(d, i) {
         return Math.floor(d.value * _this.coef);
       });
       text = this.el.selectAll('text').data(this.data).enter().append('text');
@@ -169,6 +169,7 @@
 
     BarChart.prototype.collapse = function(callback) {
       var _this = this;
+      this.el.selectAll("text").remove();
       return this.el.selectAll("rect").transition().duration(1000).attr("width", function(d, i) {
         return 0;
       }).each("end", function(d, i) {
