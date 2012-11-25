@@ -19,16 +19,14 @@
   <![endif]-->
   <style type="text/css">
     #chart text{
-      color: white;
+      fill:#000;
       font-size: 12px;
       font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
-    #chart rect{
-      fill: #AD1D28;
-    }
-    #chart text{
-      fill:#EAEAEA;
+    #characters{
+      width:300px;
+      height:80px;
     }
   </style> 
 </head>
@@ -41,12 +39,13 @@
       </div>
     </div>
     <div class="main container">
+       <h2><small>Type in some characters and hit send</small></h2>
        <textarea id="characters"></textarea>
-       <a id="send" class="btn btn-primary" target="_self" href="javascript:void(null);">Send</a>
+       <a id="send" class="btn btn-primary" href="javascript:void(null);">Send</a>
+       <a id="toggleType" class="btn btn-primary" href="javascript:void(null);">Toggle Type</a>
        <br />
        <br />
-       <div id="chart">
-      </div>
+       <div id="chart"></div>
        <br />
        <br />
        <pre class="well" id="data"></pre>
@@ -54,6 +53,7 @@
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script type="text/javascript" src="/js/libs/socket.io.js"></script>
     <script type="text/javascript" src="/js/libs/d3.v2.js"></script>
+    <script type="text/javascript" src="/js/chart-view.js"></script>
     <script type="text/javascript" src="/js/app.js"></script>
 </body>
 </html>
